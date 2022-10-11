@@ -1,7 +1,7 @@
-package com.boots.controller;
+package itstep.social_freedom.controller;
 
-import com.boots.entity.User;
-import com.boots.service.UserService;
+import itstep.social_freedom.entity.User;
+import itstep.social_freedom.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,11 +32,11 @@ public class RegistrationController {
             return "registration";
         }
         if (!userForm.getPassword().equals(userForm.getPasswordConfirm())){
-            model.addAttribute("passwordError", "Пароли не совпадают");
+            model.addAttribute("passwordError", "Passwords do not match");
             return "registration";
         }
         if (!userService.saveUser(userForm)){
-            model.addAttribute("usernameError", "Пользователь с таким именем уже существует");
+            model.addAttribute("usernameError", "A user with the same name already exists");
             return "registration";
         }
 

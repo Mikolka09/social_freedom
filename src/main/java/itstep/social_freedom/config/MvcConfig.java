@@ -1,4 +1,4 @@
-package com.boots.config;
+package itstep.social_freedom.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;

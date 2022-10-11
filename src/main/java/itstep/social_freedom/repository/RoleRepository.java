@@ -1,7 +1,7 @@
-package com.boots.repository;
+package itstep.social_freedom.repository;
 
 
-import com.boots.entity.Role;
+import itstep.social_freedom.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RoleRepository extends JpaRepository<Role, Long> {

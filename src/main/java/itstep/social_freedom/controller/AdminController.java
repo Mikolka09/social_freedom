@@ -1,7 +1,6 @@
-package com.boots.controller;
+package itstep.social_freedom.controller;
 
-import com.boots.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import itstep.social_freedom.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,8 +10,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class AdminController {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public AdminController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/admin")
     public String userList(Model model) {

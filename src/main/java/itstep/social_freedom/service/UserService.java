@@ -1,9 +1,9 @@
-package com.boots.service;
+package itstep.social_freedom.service;
 
-import com.boots.entity.Role;
-import com.boots.entity.User;
-import com.boots.repository.RoleRepository;
-import com.boots.repository.UserRepository;
+import itstep.social_freedom.entity.Role;
+import itstep.social_freedom.entity.User;
+import itstep.social_freedom.repository.RoleRepository;
+import itstep.social_freedom.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
