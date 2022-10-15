@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Date;
@@ -23,6 +24,9 @@ public class User implements UserDetails {
     private Long id;
     @Size(min = 2, message = "At least 5 characters")
     private String username;
+    @Email
+    private String email;
+
     @Size(min = 2, message = "At least 5 characters")
     private String password;
     @Transient

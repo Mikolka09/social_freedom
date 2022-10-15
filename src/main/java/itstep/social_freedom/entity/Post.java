@@ -45,6 +45,7 @@ public class Post {
     @Column(columnDefinition="TEXT")
     private String body;
     private String imgUrl;
+    private boolean verified;
 
     @CreationTimestamp
     private Date createdAt;

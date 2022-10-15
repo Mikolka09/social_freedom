@@ -5,6 +5,8 @@ import itstep.social_freedom.entity.User;
 import itstep.social_freedom.repository.RoleRepository;
 import itstep.social_freedom.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -37,6 +39,11 @@ public class UserService implements UserDetailsService {
         }
 
         return user;
+    }
+
+    public User getCurrentUsername() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return userRepository.findByUsername(auth.getName());
     }
 
     public User findUserById(Long userId) {
