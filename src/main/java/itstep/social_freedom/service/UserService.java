@@ -61,7 +61,9 @@ public class UserService implements UserDetailsService {
         if (userFromDB != null) {
             return false;
         }
-
+        
+        if (userFromDB.getAvatarUrl() == null)
+            user.setAvatarUrl("avatar/user.png");
         user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
