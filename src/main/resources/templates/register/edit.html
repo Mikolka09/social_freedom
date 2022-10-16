@@ -33,13 +33,13 @@
                         <img src="/img/logo_freedom.png" width="200px">
                     </a>
                     <br><br>
-                    <form method="POST" enctype="multipart/form-data" action="/registration/addUser"
+                    <form method="POST" enctype="multipart/form-data" action="/register/edit"
                           class="register-form"
                           id="edit-form">
                         <input type="hidden" name="id" th:value="${User.getId()}"/>
                         <div class="form-group">
                             <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                            <input type="text" name="name" id="name" th:value="${User.getUsername()}"/>
+                            <input type="text" name="username" id="name" th:value="${User.getUsername()}"/>
                         </div>
                         <div class="form-group">
                             <label for="email"><i class="zmdi zmdi-email"></i></label>
@@ -47,7 +47,17 @@
                                    placeholder="Your Email"/>
                         </div>
                         <div class="form-group">
-                            <label for="avatar"><i class="zmdi zmdi-image"></i></label>
+                            <label for="pass"><i class="zmdi zmdi-lock"></i></label>
+                            <input type="password" name="password" id="pass" placeholder="Password"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="re_pass"><i class="zmdi zmdi-lock-outline"></i></label>
+                            <input type="password" name="passwordConfirm" id="re_pass"
+                                   placeholder="Repeat your password"/>
+                        </div>
+                        <div class="form-group">
+                            <img style="border-radius: 50%; padding-bottom: 5px" width="40px"
+                                 th:src="${User.getAvatarUrl()}" alt="Url">
                             <input class="form-control" type="file" name="avatar" id="avatar" multiple/>
                         </div>
                         <div class="form-group form-button">

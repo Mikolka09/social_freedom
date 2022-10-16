@@ -44,7 +44,7 @@
 
         <nav id="navbar" class="navbar">
             <ul>
-                <li><a href="index.html">Blog</a></li>
+                <li><a href="/">Blog</a></li>
                 <li><a href="single-post.html">Single Post</a></li>
                 <li class="dropdown"><a href="category.html"><span>Categories</span> <i
                         class="bi bi-chevron-down dropdown-indicator"></i></a>
@@ -74,7 +74,7 @@
                                             class="bi bi-chevron-down dropdown-indicator"></i></a>
                                 <ul>
                                     <li><a th:href="@{|/registration/edit/${User.getId()}|}">Edit</a></li>
-                                    <li><a href="#">Drop Down 1</a></li>
+                                    <li><a th:href="@{|/post/${User.getId()}|}">Post</a></li>
                                     <li><a href="#">Drop Down 2</a></li>
                                     <li><a href="#">Drop Down 3</a></li>
                                     <li>

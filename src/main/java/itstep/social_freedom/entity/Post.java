@@ -24,13 +24,13 @@ public class Post {
     private User user;
 
     @ManyToMany(fetch = FetchType.LAZY,
-    cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
     @JoinTable(name = "posts_tags",
-    joinColumns = @JoinColumn(name = "post_id"),
-    inverseJoinColumns = @JoinColumn(name = "tag_id"))
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
     @JsonIgnore
     private Set<Tag> tags = new HashSet<>();
 
@@ -42,10 +42,11 @@ public class Post {
     private String title;
     private String shortName;
 
-    @Column(columnDefinition="TEXT")
+    @Column(columnDefinition = "TEXT")
     private String body;
     private String imgUrl;
     private boolean verified;
+    private Integer likes;
 
     @CreationTimestamp
     private Date createdAt;

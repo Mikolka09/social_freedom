@@ -18,14 +18,14 @@ public class FileService {
     @Value("${upload.path}")
     public String uploadDir;
 
-    public String uploadFile(MultipartFile file) {
+    public String uploadFile(MultipartFile file, String path) {
 
         try {
             Path copyLocation = Paths
-                    .get(uploadDir + "avatar" + File.separator +
+                    .get(uploadDir + path + File.separator +
                             StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename())));
             Files.copy(file.getInputStream(), copyLocation, StandardCopyOption.REPLACE_EXISTING);
-            return ("avatar/" + StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename())));
+            return (path + "/" + StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename())));
         } catch (Exception e) {
             e.printStackTrace();
             throw new StorageException("Could not store file " + file.getOriginalFilename()

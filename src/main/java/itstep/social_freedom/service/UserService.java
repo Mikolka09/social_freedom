@@ -17,6 +17,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -61,13 +62,35 @@ public class UserService implements UserDetailsService {
         if (userFromDB != null) {
             return false;
         }
-        
-        if (userFromDB.getAvatarUrl() == null)
-            user.setAvatarUrl("avatar/user.png");
+
+        user.setAvatarUrl("avatar/user.png");
         user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return true;
+    }
+
+    public boolean save(User user) {
+        User userFromDB = userRepository.findByUsername(user.getUsername());
+        if (userFromDB == null) {
+            userFromDB = userRepository.findById(user.getId()).orElse(new User());
+            userFromDB.setUsername(user.getUsername());
+            userFromDB.setEmail(user.getEmail());
+            if (user.getAvatarUrl() != null)
+                userFromDB.setAvatarUrl(user.getAvatarUrl());
+            userFromDB.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            userRepository.save(userFromDB);
+            return true;
+        } else if (Objects.equals(userFromDB.getId(), user.getId())) {
+            userFromDB.setEmail(user.getEmail());
+            if (user.getAvatarUrl() != null)
+                userFromDB.setAvatarUrl(user.getAvatarUrl());
+            userFromDB.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            userRepository.save(userFromDB);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public boolean deleteUser(Long userId) {
