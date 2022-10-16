@@ -5,18 +5,12 @@ import itstep.social_freedom.entity.Category;
 import itstep.social_freedom.entity.Post;
 import itstep.social_freedom.entity.Tag;
 import itstep.social_freedom.entity.User;
-import itstep.social_freedom.service.CategoryService;
-import itstep.social_freedom.service.FileService;
-import itstep.social_freedom.service.PostService;
-import itstep.social_freedom.service.TagService;
+import itstep.social_freedom.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -31,6 +25,9 @@ public class PostController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private TagService tagService;
@@ -63,21 +60,17 @@ public class PostController {
         return "post/create-post";
     }
 
-    @GetMapping("/post/store")
-    public String store(@ModelAttribute("post") @Valid Post post,
-                        BindingResult bindingResult, Model model,
+    @PostMapping("/post/store")
+    public String store(Post post,
                         @RequestParam(value = "id") Long id,
-                        @RequestParam(value = "imgUrl") MultipartFile file,
+                        @RequestParam(value = "file") MultipartFile file,
                         @RequestParam(value = "title") String title,
                         @RequestParam(value = "shortName") String shortName,
                         @RequestParam(value = "category_id") Long category_id,
                         @RequestParam(value = "description") String description,
                         @RequestParam(value = "tag_id") Long[] tag_id) {
 
-        if (bindingResult.hasErrors()) {
-            return "post/create-post";
-        }
-
+        post.setUser(userService.findUserById(id));
         post.setTitle(title);
         post.setShortName(shortName);
         post.setCategory(categoryService.findCategoryById(category_id));
@@ -95,10 +88,10 @@ public class PostController {
 
         if (file != null) {
             if (!file.isEmpty())
-                post.setImgUrl(fileService.uploadFile(file, "post"));
+                post.setImgUrl(fileService.uploadFile(file, ""));
         }
-
-        return "";
+        postService.savePost(post);
+        return "redirect:/post/" + id;
     }
 
 }

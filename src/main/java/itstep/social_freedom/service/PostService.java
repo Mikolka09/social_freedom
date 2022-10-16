@@ -17,4 +17,13 @@ public class PostService {
     public List<Post> allPosts() {
         return postRepository.findAll();
     }
+
+    public boolean savePost(Post post) {
+        if (post != null) {
+            postRepository.save(post);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
