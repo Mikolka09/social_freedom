@@ -71,7 +71,7 @@ public class RegistrationController {
 
         if (file != null) {
             if (!file.isEmpty())
-                userForm.setAvatarUrl(fileService.uploadFile(file, "avatar"));
+                userForm.setAvatarUrl(fileService.uploadFile(file, "avatar/"));
         }
 
         if (bindingResult.hasErrors()) {

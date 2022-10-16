@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up Form by FREEDOM</title>
+    <title>FREEDOM</title>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
@@ -17,25 +17,29 @@
 <div class="col-md-8 col-md-offset-2">
     <h1 class="text-center">List Posts</h1>
     <p>
-        <a class="btn btn-success btn-sm" style="border-radius:6px;">Create new post</a>
+        <a class="btn btn-success btn-sm" style="border-radius:6px;"
+           th:href="@{|/post/create/${user_id}|}">Create new post</a>
+        <a class="btn btn-info btn-sm" style="border-radius:6px;" th:href="@{'/'}">Back</a>
     </p>
     <table class="table table-hover align-self-center">
         <thead>
         <tr style="background: #cff4fc;">
-            <th scope="col">#</th>
             <th scope="col">Image</th>
             <th scope="col">Title</th>
             <th scope="col">Short Name</th>
+            <th scope="col">Category</th>
             <th scope="col">Tags</th>
+            <th scope="col">Likes</th>
             <th scope="col">Buttons</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="post:${posts}">
-            <th scope="row" th:text="${post.getId()}"></th>
-            <td><img width="100px" th:src="@{|http://localhost:8080/${post.getImgUrl()}|}"></td>
+            <td><img width="100px"
+                     th:src="@{|http://localhost:8080/${post.getImgUrl()}|}"></td>
             <td th:text="${post.getTitle()}"></td>
             <td th:text="${post.getShortName()}"></td>
+            <td th:text="${post.getCategory().getName()}"></td>
             <td>
                 <select class="form-control" name="tag_id" id="tag_id">
                     <option th:each="tag : ${post.getTags()}"
@@ -43,6 +47,7 @@
                             th:text="${tag.name}"></option>
                 </select>
             </td>
+            <td th:text="${post.getLikes()==null?0:post.getLikes()}"></td>
             <td>
                 <a class="btn btn-primary btn-sm" style="border-radius:6px;">Edit</a>
                 <a class="btn btn-info btn-sm" style="border-radius:6px;">Details</a>

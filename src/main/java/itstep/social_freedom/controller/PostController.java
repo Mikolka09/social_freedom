@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -40,8 +41,9 @@ public class PostController {
 
     @GetMapping("/post/{id}")
     public String index(@PathVariable(name = "id") Long id, Model model) {
-        List<Post> posts = postService.allPosts();
+        List<Post> posts = postService.allPosts(id);
         if (!posts.isEmpty()) {
+            model.addAttribute("user_id", id);
             model.addAttribute("posts", posts);
             return "post/index";
         } else {
@@ -52,7 +54,6 @@ public class PostController {
     @GetMapping("/post/create/{id}")
     public String create(@PathVariable(name = "id") Long id, Model model) {
         model.addAttribute("user_id", id);
-        model.addAttribute("post", new Post());
         List<Category> categories = categoryService.allCategory();
         List<Tag> tags = tagService.allTag();
         model.addAttribute("categories", categories);
@@ -61,15 +62,14 @@ public class PostController {
     }
 
     @PostMapping("/post/store")
-    public String store(Post post,
-                        @RequestParam(value = "id") Long id,
+    public String store(@RequestParam(value = "id") Long id,
                         @RequestParam(value = "file") MultipartFile file,
                         @RequestParam(value = "title") String title,
                         @RequestParam(value = "shortName") String shortName,
                         @RequestParam(value = "category_id") Long category_id,
                         @RequestParam(value = "description") String description,
                         @RequestParam(value = "tag_id") Long[] tag_id) {
-
+        Post post = new Post();
         post.setUser(userService.findUserById(id));
         post.setTitle(title);
         post.setShortName(shortName);
@@ -90,7 +90,8 @@ public class PostController {
             if (!file.isEmpty())
                 post.setImgUrl(fileService.uploadFile(file, ""));
         }
-        postService.savePost(post);
+        if (!postService.savePost(post))
+            return "redirect:/post/store";
         return "redirect:/post/" + id;
     }
 
