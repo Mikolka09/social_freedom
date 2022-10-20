@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
@@ -49,52 +50,74 @@ public class RegistrationController {
     }
 
     @PostMapping("/register/edit")
-    public RedirectView Edit(@ModelAttribute("userForm") @Valid User userForm,
-                             BindingResult bindingResult, Model model,
-                             @RequestParam(value = "id") Long id,
-                             @RequestParam(value = "avatar") MultipartFile file,
-                             @RequestParam(value = "username") String username,
-                             @RequestParam(value = "email") String email,
-                             @RequestParam(value = "password") String password,
-                             @RequestParam(value = "passwordConfirm") String passwordConfirm) {
-        String path = "registration/edit/" + userForm.getId();
-        userForm.setId(id);
+    public String Edit(@ModelAttribute("userForm") @Valid User userForm,
+                       BindingResult bindingResult, Model model,
+                       RedirectAttributes redirectAttributes,
+                       @RequestParam(value = "id") Long id,
+                       @RequestParam(value = "avatar") MultipartFile file,
+                       @RequestParam(value = "username") String username,
+                       @RequestParam(value = "email") String email,
+                       @RequestParam(value = "password") String password,
+                       @RequestParam(value = "passwordConfirm") String passwordConfirm) {
+
+        String error = "";
+        String path = "http://localhost:8080/registration/edit/" + userForm.getId();
+
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.getFlashAttributes().clear();
+            redirectAttributes.addFlashAttribute("error", "Not all fields are filled!");
+            return "redirect:" + (path);
+        }
         userForm.setEmail(email);
         userForm.setUsername(username);
-        if (Objects.equals(password, "") && Objects.equals(passwordConfirm, "")) {
-            return new RedirectView(path);
-        } else {
-            userForm.setPassword(password);
-            userForm.setPasswordConfirm(passwordConfirm);
-        }
 
+        if (userService.checkPassword(id, password)) {
+            if (Objects.equals(password, "") && Objects.equals(passwordConfirm, "")) {
+                redirectAttributes.getFlashAttributes().clear();
+                redirectAttributes.addFlashAttribute("error", "Not all fields are filled!");
+                return "redirect:" + (path);
+            } else if (!userForm.getPassword().equals(userForm.getPasswordConfirm())) {
+                redirectAttributes.getFlashAttributes().clear();
+                redirectAttributes.addFlashAttribute("error", "Passwords do not match!");
+                return "redirect:" + (path);
+            } else {
+                userForm.setPassword(password);
+                userForm.setPasswordConfirm(passwordConfirm);
+            }
+        } else {
+            redirectAttributes.getFlashAttributes().clear();
+            redirectAttributes.addFlashAttribute("error", "The old password was entered incorrectly!");
+            return "redirect:" + (path);
+        }
 
         if (file != null) {
             if (!file.isEmpty())
                 userForm.setAvatarUrl(fileService.uploadFile(file, "avatar/"));
         }
 
-        if (bindingResult.hasErrors()) {
-            return new RedirectView(path);
-        }
-        if (!userForm.getPassword().equals(userForm.getPasswordConfirm())) {
-            model.addAttribute("passwordError", "Passwords do not match");
-            return new RedirectView(path);
-        }
         if (!userService.save(userForm)) {
-            model.addAttribute("usernameError", "A user with the same name already exists");
-            return new RedirectView(path);
+            redirectAttributes.getFlashAttributes().clear();
+            redirectAttributes.addFlashAttribute("error", "A user with the same name already exists!");
+            return "redirect:" + (path);
         }
 
-        return new RedirectView("/");
+        return "redirect:/";
     }
 
     @GetMapping("registration/edit/{id}")
     public String editUser(@PathVariable(name = "id") Long id, Model model) {
+
         User user = userService.findUserById(id);
         String url = user.getAvatarUrl();
         user.setAvatarUrl("http://localhost:8080/" + url);
         model.addAttribute("User", user);
         return "/register/edit";
     }
+
+    @GetMapping("registration/delete/{id}")
+    public String deleteUser(@PathVariable(name = "id") Long id) {
+        userService.deleteUser(id);
+        return "redirect:/";
+    }
+
 }

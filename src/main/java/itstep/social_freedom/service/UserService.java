@@ -70,6 +70,12 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
+    public boolean checkPassword(Long id, String pass) {
+        String realPass = userRepository.findById(id).orElse(new User()).getPassword();
+        String oldPass = bCryptPasswordEncoder.encode(pass);
+        return realPass.equals(oldPass);
+    }
+
     public boolean save(User user) {
         User userFromDB = userRepository.findByUsername(user.getUsername());
         if (userFromDB == null) {
@@ -95,7 +101,7 @@ public class UserService implements UserDetailsService {
 
     public boolean deleteUser(Long userId) {
         if (userRepository.findById(userId).isPresent()) {
-            userRepository.deleteById(userId);
+            userRepository.deleteUserById(userId);
             return true;
         }
         return false;
@@ -105,5 +111,6 @@ public class UserService implements UserDetailsService {
         return em.createQuery("SELECT u FROM User u WHERE u.id > :paramId", User.class)
                 .setParameter("paramId", idMin).getResultList();
     }
+
 
 }

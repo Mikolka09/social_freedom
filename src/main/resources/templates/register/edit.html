@@ -32,7 +32,9 @@
                     <a href="/" class="logo d-flex align-items-center">
                         <img src="/img/logo_freedom.png" width="200px">
                     </a>
-                    <br><br>
+                    <br>
+                    <span style="color: red;" th:if="${error}!=null" th:text="${error}"></span>
+                    <br>
                     <form method="POST" enctype="multipart/form-data" action="/register/edit"
                           class="register-form"
                           id="edit-form">
@@ -47,13 +49,17 @@
                                    placeholder="Your Email"/>
                         </div>
                         <div class="form-group">
-                            <label for="pass"><i class="zmdi zmdi-lock"></i></label>
-                            <input type="password" name="password" id="pass" placeholder="Password"/>
+                            <label for="passOld"><i class="zmdi zmdi-lock"></i></label>
+                            <input type="password" name="passOld" id="passOld" placeholder="Old Password"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="pass"><i class="zmdi zmdi-lock-open"></i></label>
+                            <input type="password" name="password" id="pass" placeholder="New Password"/>
                         </div>
                         <div class="form-group">
                             <label for="re_pass"><i class="zmdi zmdi-lock-outline"></i></label>
                             <input type="password" name="passwordConfirm" id="re_pass"
-                                   placeholder="Repeat your password"/>
+                                   placeholder="Repeat your new password"/>
                         </div>
                         <div class="form-group">
                             <img style="border-radius: 50%; padding-bottom: 5px" width="40px"
