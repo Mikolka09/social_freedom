@@ -32,7 +32,9 @@
                     <a href="/" class="logo d-flex align-items-center">
                         <img src="/img/logo_freedom.png" width="200px">
                     </a>
-                    <br><br>
+                    <br>
+                    <span style="color: red;" th:if="${error}!=null" th:text="${error}"></span>
+                    <br>
                     <form method="POST" action="/registration/addUser" th:object="${userForm}" class="register-form"
                           id="register-form">
                         <div class="form-group">

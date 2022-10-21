@@ -65,7 +65,7 @@
         <div class="position-relative">
             <div class="d-flex justify-content-end">
                 <div>
-                    <nav th:if="${User != null}" id="navbar1" class="navbar">
+                    <nav th:if="${User != null and User.getRemoved() != 1}" id="navbar1" class="navbar">
                         <ul>
                             <li class="dropdown">
                                 <a href="#"><img class="px-1 rounded-circle" width="40px"
@@ -85,7 +85,7 @@
                             </li>
                         </ul>
                     </nav>
-                    <a th:if="${User == null}" href="/login" title="LogIn" class="mx-2"><span
+                    <a th:if="${User == null or User.getRemoved() == 1}" href="/login" title="LogIn" class="mx-2"><span
                             class="bi-person-circle"></span></a>
                 </div>
                 <div class="align-self-center">

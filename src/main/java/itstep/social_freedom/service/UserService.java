@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -35,7 +36,7 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
 
-        if (user == null) {
+        if (user == null || user.getRemoved() == 1) {
             throw new UsernameNotFoundException("User not found!");
         }
 
@@ -62,7 +63,7 @@ public class UserService implements UserDetailsService {
         if (userFromDB != null) {
             return false;
         }
-
+        user.setRemoved(0);
         user.setAvatarUrl("avatar/user.png");
         user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
@@ -71,9 +72,9 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean checkPassword(Long id, String pass) {
-        String realPass = userRepository.findById(id).orElse(new User()).getPassword();
-        String oldPass = bCryptPasswordEncoder.encode(pass);
-        return realPass.equals(oldPass);
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        String oldPass = userRepository.findById(id).orElse(new User()).getPassword();
+        return encoder.matches(pass, oldPass);
     }
 
     public boolean save(User user) {
@@ -99,12 +100,12 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public boolean deleteUser(Long userId) {
+    public void deleteUser(Long userId) {
         if (userRepository.findById(userId).isPresent()) {
-            userRepository.deleteUserById(userId);
-            return true;
+            User user = userRepository.findById(userId).orElse(new User());
+            user.setRemoved(1);
+            userRepository.save(user);
         }
-        return false;
     }
 
     public List<User> usergtList(Long idMin) {

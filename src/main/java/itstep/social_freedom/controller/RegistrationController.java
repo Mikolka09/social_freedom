@@ -35,14 +35,15 @@ public class RegistrationController {
                           BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
+            model.addAttribute("error", "Not all fields are filled!");
             return "register/register";
         }
         if (!userForm.getPassword().equals(userForm.getPasswordConfirm())) {
-            model.addAttribute("passwordError", "Passwords do not match");
+            model.addAttribute("error", "Passwords do not match");
             return "register/register";
         }
         if (!userService.saveUser(userForm)) {
-            model.addAttribute("usernameError", "A user with the same name already exists");
+            model.addAttribute("error", "A user with the same name already exists");
             return "register/register";
         }
 
@@ -57,11 +58,11 @@ public class RegistrationController {
                        @RequestParam(value = "avatar") MultipartFile file,
                        @RequestParam(value = "username") String username,
                        @RequestParam(value = "email") String email,
+                       @RequestParam(value = "passOld") String oldPass,
                        @RequestParam(value = "password") String password,
                        @RequestParam(value = "passwordConfirm") String passwordConfirm) {
 
-        String error = "";
-        String path = "http://localhost:8080/registration/edit/" + userForm.getId();
+        String path = "../registration/edit/" + userForm.getId();
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.getFlashAttributes().clear();
@@ -71,7 +72,7 @@ public class RegistrationController {
         userForm.setEmail(email);
         userForm.setUsername(username);
 
-        if (userService.checkPassword(id, password)) {
+        if (userService.checkPassword(id, oldPass)) {
             if (Objects.equals(password, "") && Objects.equals(passwordConfirm, "")) {
                 redirectAttributes.getFlashAttributes().clear();
                 redirectAttributes.addFlashAttribute("error", "Not all fields are filled!");

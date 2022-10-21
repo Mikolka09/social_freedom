@@ -37,7 +37,9 @@
                     <a href="/" class="logo d-flex align-items-center">
                         <img src="/img/logo_freedom.png" width="200px">
                     </a>
-                    <br><br>
+                    <br>
+                    <span style="color: red;" th:if="${param.error}">User not found!</span>
+                    <br>
                     <form method="POST" class="register-form" id="login-form" action="/login">
                         <div class="form-group">
                             <label for="username"><i class="zmdi zmdi-account material-icons-name"></i></label>
