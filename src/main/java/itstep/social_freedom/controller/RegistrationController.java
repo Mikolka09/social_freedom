@@ -10,7 +10,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
 import java.util.Objects;
@@ -52,7 +51,7 @@ public class RegistrationController {
 
     @PostMapping("/register/edit")
     public String Edit(@ModelAttribute("userForm") @Valid User userForm,
-                       BindingResult bindingResult, Model model,
+                       BindingResult bindingResult,
                        RedirectAttributes redirectAttributes,
                        @RequestParam(value = "id") Long id,
                        @RequestParam(value = "avatar") MultipartFile file,

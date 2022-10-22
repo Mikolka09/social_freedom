@@ -46,14 +46,10 @@
             <ul>
                 <li><a href="/">Blog</a></li>
                 <li><a href="single-post.html">Single Post</a></li>
-                <li class="dropdown"><a href="category.html"><span>Categories</span> <i
+                <li class="dropdown"><a href="#"><span>Categories</span> <i
                         class="bi bi-chevron-down dropdown-indicator"></i></a>
                     <ul>
-                        <li><a href="search-result.html">Search Result</a></li>
-                        <li><a href="#">Drop Down 1</a></li>
-                        <li><a href="#">Drop Down 2</a></li>
-                        <li><a href="#">Drop Down 3</a></li>
-                        <li><a href="#">Drop Down 4</a></li>
+                        <li th:each="category :${categories}"><a th:text="${category.getName()}" href="#"></a></li>
                     </ul>
                 </li>
 
@@ -76,7 +72,7 @@
                                     <li><a th:href="@{|/registration/edit/${User.getId()}|}">Edit User</a></li>
                                     <li><a th:href="@{|/registration/delete/${User.getId()}|}">Delete User</a></li>
                                     <li><a th:href="@{|/post/${User.getId()}|}">My Posts</a></li>
-                                    <li><a href="#">Drop Down 2</a></li>
+                                    <li><a th:if="${User.getUsername() =='Admin'}" href="/admin">DashBoard</a></li>
                                     <li><a href="#">Drop Down 3</a></li>
                                     <li>
                                         <hr style="margin: 0">
