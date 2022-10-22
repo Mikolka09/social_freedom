@@ -4,17 +4,13 @@ package itstep.social_freedom.controller;
 import itstep.social_freedom.entity.Category;
 import itstep.social_freedom.entity.Post;
 import itstep.social_freedom.entity.Tag;
-import itstep.social_freedom.entity.User;
 import itstep.social_freedom.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-
-import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -62,7 +58,7 @@ public class PostController {
     }
 
     @PostMapping("/post/store")
-    public String store(@RequestParam(value = "id") Long id,
+    public String store(@RequestParam(value = "id") Long user_id,
                         @RequestParam(value = "file") MultipartFile file,
                         @RequestParam(value = "title") String title,
                         @RequestParam(value = "shortName") String shortName,
@@ -70,11 +66,44 @@ public class PostController {
                         @RequestParam(value = "description") String description,
                         @RequestParam(value = "tag_id") Long[] tag_id) {
         Post post = new Post();
-        post.setUser(userService.findUserById(id));
-        post.setTitle(title);
-        post.setShortName(shortName);
+        return setPost(user_id, file, title, shortName, category_id, description, tag_id, post);
+    }
+
+    @GetMapping("/post/edit/{id}")
+    public String editPost(@PathVariable(name = "id") Long post_id, Model model) {
+        Post post = postService.findPostById(post_id);
+        List<Category> categories = categoryService.allCategory();
+        List<Tag> tags = tagService.allTag();
+        model.addAttribute("user_id", post.getUser().getId());
+        model.addAttribute("categories", categories);
+        model.addAttribute("tags", tags);
+        model.addAttribute("post", post);
+        return "/post/edit-post";
+    }
+
+    @PostMapping("/post/edit-store/{id}")
+    public String editStore(@RequestParam(value = "user_id") Long user_id,
+                            @PathVariable(name = "id") Long post_id,
+                            @RequestParam(value = "file") MultipartFile file,
+                            @RequestParam(value = "title") String title,
+                            @RequestParam(value = "shortName") String shortName,
+                            @RequestParam(value = "category_id") Long category_id,
+                            @RequestParam(value = "description") String description,
+                            @RequestParam(value = "tag_id") Long[] tag_id) {
+        Post post = postService.findPostById(post_id);
+        return setPost(user_id, file, title, shortName, category_id, description, tag_id, post);
+    }
+
+    private String setPost(Long user_id, MultipartFile file, String title, String shortName, Long category_id,
+                           String description, Long[] tag_id, Post post) {
+        post.setUser(userService.findUserById(user_id));
+        if (!Objects.equals(title, ""))
+            post.setTitle(title);
+        if (!Objects.equals(shortName, ""))
+            post.setShortName(shortName);
         post.setCategory(categoryService.findCategoryById(category_id));
-        post.setBody(description);
+        if (!Objects.equals(description, ""))
+            post.setBody(description);
         if (tag_id != null) {
             if (tag_id.length != 0) {
                 Set<Tag> tagSet = new HashSet<>();
@@ -92,7 +121,25 @@ public class PostController {
         }
         if (!postService.savePost(post))
             return "redirect:/post/store";
-        return "redirect:/post/" + id;
+        return "redirect:/post/" + user_id;
+    }
+
+    @GetMapping("post/preview/{id}")
+    public String previewPost(@PathVariable(name = "id") Long post_id, Model model) {
+        Post post = postService.findPostById(post_id);
+        String[] bodies = postService.arrayBody(post.getBody());
+        List<Category> categories = categoryService.allCategory();
+        model.addAttribute("categories", categories);
+        model.addAttribute("bodies", bodies);
+        model.addAttribute("post", post);
+        return "/post/preview-post";
+    }
+
+    @GetMapping("post/delete/{id}")
+    public String deletePost(@PathVariable(name = "id") Long post_id) {
+        postService.deletePost(post_id);
+        Long user_id = userService.getCurrentUsername().getId();
+        return "redirect:../../post/" + user_id;
     }
 
 }

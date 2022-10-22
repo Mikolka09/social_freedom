@@ -16,43 +16,51 @@
 <body>
 <div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <h1 class="text-center">Create Post</h1>
+        <h1 class="text-center">Create Post</h1>
+        <div class="col-md-8">
             <form action="/post/store" enctype="multipart/form-data" method="POST">
                 <input type="hidden" name="id" th:value="${user_id}">
-                <div class="form-group">
-                    <label for="title">Title</label>
-                    <input type="text" name="title" class="form-control" id="title"
-                           placeholder="Title">
-                </div>
-                <div class="form-group">
-                    <label for="shortName">Short Name</label>
-                    <input type="text" name="shortName" class="form-control" id="shortName"
-                           placeholder="Short Name">
-                </div>
-                <div class="form-group">
-                    <label for="category_id">Category</label>
-                    <select class="form-control" name="category_id" id="category_id">
-                        <option th:each="category : ${categories}"
-                                th:value="${category.id}"
-                                th:text="${category.name}"></option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="file">Image</label>
-                    <input class="form-control" type="file" name="file" id="file"/>
-                </div>
-                <div class="form-group">
-                    <label for="description">Description</label>
-                    <textarea class="form-control" name="description" id="description" rows="3"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="tag_id">Tag</label>
-                    <select class="form-control" name="tag_id" id="tag_id" multiple>
-                        <option th:each="tag : ${tags}"
-                                th:value="${tag.id}"
-                                th:text="${tag.name}"></option>
-                    </select>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6">
+                            <div class="form-group">
+                                <label for="title">Title</label>
+                                <input type="text" name="title" class="form-control" id="title"
+                                       placeholder="Title">
+                            </div>
+                            <div class="form-group">
+                                <label for="shortName">Short Name</label>
+                                <input type="text" name="shortName" class="form-control" id="shortName"
+                                       placeholder="Short Name">
+                            </div>
+                            <div class="form-group">
+                                <label for="category_id">Category</label>
+                                <select class="form-control" name="category_id" id="category_id">
+                                    <option th:each="category : ${categories}"
+                                            th:value="${category.id}"
+                                            th:text="${category.name}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="file">Image</label>
+                                <input class="form-control" type="file" name="file" id="file"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="tag_id">Tag</label>
+                                <select class="form-control" name="tag_id" id="tag_id" multiple>
+                                    <option th:each="tag : ${tags}"
+                                            th:value="${tag.id}"
+                                            th:text="${tag.name}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea class="form-control" name="description" id="description" rows="26"></textarea>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group form-button">
                     <input type="submit" name="signup" id="signup" class="btn btn-success" value="Create"/>

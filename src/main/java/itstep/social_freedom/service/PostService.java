@@ -1,7 +1,6 @@
 package itstep.social_freedom.service;
 
 import itstep.social_freedom.entity.Post;
-import itstep.social_freedom.entity.User;
 import itstep.social_freedom.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +8,8 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -21,9 +22,8 @@ public class PostService {
     private PostRepository postRepository;
 
     public List<Post> allPosts(Long id) {
-        List<Post> posts = em.createQuery("SELECT p FROM Post p WHERE p.user.id = :paramId", Post.class)
-                .setParameter("paramId", id).getResultList();
-        return posts;
+        return postRepository.findAll().stream().filter(x -> Objects.equals(x.getUser().getId(), id))
+                .collect(Collectors.toList());
     }
 
     public boolean savePost(Post post) {
@@ -33,5 +33,21 @@ public class PostService {
         } else {
             return false;
         }
+    }
+
+    public Post findPostById(Long post_id) {
+        return postRepository.findById(post_id).orElse(new Post());
+    }
+
+    public void deletePost(Long postId) {
+        if (postRepository.findById(postId).isPresent()) {
+            Post post = findPostById(postId);
+            postRepository.delete(post);
+        }
+    }
+
+    public String[] arrayBody(String body) {
+        String[] arr = body.split("\n");
+        return arr;
     }
 }

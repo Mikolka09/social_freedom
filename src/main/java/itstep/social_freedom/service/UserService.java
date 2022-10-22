@@ -36,7 +36,7 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
 
-        if (user == null || user.getRemoved() == 1) {
+        if (user == null || user.isRemoved()) {
             throw new UsernameNotFoundException("User not found!");
         }
 
@@ -63,7 +63,7 @@ public class UserService implements UserDetailsService {
         if (userFromDB != null) {
             return false;
         }
-        user.setRemoved(0);
+        user.setRemoved(false);
         user.setAvatarUrl("avatar/user.png");
         user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
@@ -103,7 +103,7 @@ public class UserService implements UserDetailsService {
     public void deleteUser(Long userId) {
         if (userRepository.findById(userId).isPresent()) {
             User user = userRepository.findById(userId).orElse(new User());
-            user.setRemoved(1);
+            user.setRemoved(true);
             userRepository.save(user);
         }
     }

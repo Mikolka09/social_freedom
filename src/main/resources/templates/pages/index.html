@@ -10,8 +10,8 @@
     <meta content="" name="keywords">
 
     <!-- Favicons -->
-    <link href="/img/favicon.png" rel="icon">
-    <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <!--<link href="/img/favicon.png" rel="icon">
+    <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">-->
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -65,7 +65,7 @@
         <div class="position-relative">
             <div class="d-flex justify-content-end">
                 <div>
-                    <nav th:if="${User != null and User.getRemoved() != 1}" id="navbar1" class="navbar">
+                    <nav th:if="${User != null and !User.isRemoved()}" id="navbar1" class="navbar">
                         <ul>
                             <li class="dropdown">
                                 <a href="#"><img class="px-1 rounded-circle" width="40px"
@@ -75,7 +75,7 @@
                                 <ul>
                                     <li><a th:href="@{|/registration/edit/${User.getId()}|}">Edit User</a></li>
                                     <li><a th:href="@{|/registration/delete/${User.getId()}|}">Delete User</a></li>
-                                    <li><a th:href="@{|/post/${User.getId()}|}">Posts</a></li>
+                                    <li><a th:href="@{|/post/${User.getId()}|}">My Posts</a></li>
                                     <li><a href="#">Drop Down 2</a></li>
                                     <li><a href="#">Drop Down 3</a></li>
                                     <li>
@@ -85,7 +85,7 @@
                             </li>
                         </ul>
                     </nav>
-                    <a th:if="${User == null or User.getRemoved() == 1}" href="/login" title="LogIn" class="mx-2"><span
+                    <a th:if="${User == null or User.isRemoved()}" href="/login" title="LogIn" class="mx-2"><span
                             class="bi-person-circle"></span></a>
                 </div>
                 <div class="align-self-center">

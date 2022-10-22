@@ -44,7 +44,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private Set<Post> posts = new HashSet<>();
 
-    private int removed;
+    private boolean removed;
 
     @CreationTimestamp
     private Date createdAt;
