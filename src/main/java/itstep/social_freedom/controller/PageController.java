@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import javax.persistence.ManyToMany;
 import java.util.List;
 
 @Controller
@@ -27,5 +28,15 @@ public class PageController {
         model.addAttribute("User", user);
         model.addAttribute("categories", categories);
         return "pages/index";
+    }
+
+    @GetMapping("/about")
+    public String about() {
+        return "pages/about";
+    }
+
+    @GetMapping("/contact")
+    public String contact() {
+        return "pages/contact";
     }
 }
