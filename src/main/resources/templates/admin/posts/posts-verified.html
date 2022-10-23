@@ -40,36 +40,48 @@
 
 
             <!-- Begin Page Content -->
-            <div class="col-md-10 col-md-offset-2">
-                <h1 class="text-center">List Users</h1>
+            <div class="col-md-12 col-md-offset-1">
+                <h1 class="text-center">List Unverified Posts</h1>
                 <table class="table table-hover align-self-center">
                     <thead>
                     <tr style="background: #cff4fc;">
-                        <th scope="col">Avatar</th>
                         <th scope="col">Username</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Removed</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Short Name</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Tags</th>
+                        <th scope="col">Likes</th>
+                        <th scope="col">isVerified</th>
                         <th scope="col">CreateAt</th>
                         <th scope="col">UpdateAt</th>
                         <th scope="col">Buttons</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="user:${allUsers}">
-                        <td><img style="border-radius: 50%; padding-bottom: 5px" width="50px"
-                                 th:src="@{|http://localhost:8080/${user.getAvatarUrl()}|}"></td>
-                        <td th:text="${user.getUsername()}"></td>
-                        <td th:text="${user.getEmail()}"></td>
-                        <td th:text="${user.isRemoved()?'True':'False'}"></td>
-                        <td th:text="${#dates.format(user.getCreatedAt(), 'dd MMM yyyy')}"></td>
-                        <td th:text="${#dates.format(user.getUpdateAt(), 'dd MMM yyyy')}"></td>
+                    <tr th:each="post:${posts}">
+                        <td th:text="${post.getUser().getUsername()}"></td>
+                        <td><img width="100px"
+                                 th:src="@{|http://localhost:8080/${post.getImgUrl()}|}"></td>
+                        <td th:text="${post.getTitle()}"></td>
+                        <td th:text="${post.getShortName()}"></td>
+                        <td th:text="${post.getCategory().getName()}"></td>
+                        <td>
+                            <select class="form-control" name="tag_id" id="tag_id">
+                                <option th:each="tag : ${post.getTags()}"
+                                        th:value="${tag.id}"
+                                        th:text="${tag.name}"></option>
+                            </select>
+                        </td>
+                        <td th:text="${post.getLikes()==null?0:post.getLikes()}"></td>
+                        <td th:text="${post.isVerified()?'True':'False'}"></td>
+                        <td th:text="${#dates.format(post.getCreatedAt(), 'dd MMM yyyy')}"></td>
+                        <td th:text="${#dates.format(post.getUpdatedAt(), 'dd MMM yyyy')}"></td>
                         <td>
                             <a class="btn btn-primary btn-sm" style="border-radius:6px;"
-                               th:href="@{|/admin/users/edit/${user.getId()}|}">Edit</a>
+                               th:href="@{|/admin/post/verify/${post.getId()}|}">Verify</a>
                             <a class="btn btn-info btn-sm" style="border-radius:6px;"
-                               th:href="@{#}">Edit Pass</a>
-                            <a class="btn btn-danger btn-sm" style="border-radius:6px;"
-                               th:href="@{#}">Delete</a>
+                               th:href="@{|/post/preview/${post.getId()}|}">Preview</a>
                         </td>
                     </tr>
                 </table>

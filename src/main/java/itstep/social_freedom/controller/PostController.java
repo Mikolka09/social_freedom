@@ -91,8 +91,8 @@ public class PostController {
         return setPost(user_id, file, title, shortName, category_id, description, tag_id, post);
     }
 
-    private String setPost(Long user_id, MultipartFile file, String title, String shortName, Long category_id,
-                           String description, Long[] tag_id, Post post) {
+    public String setPost(Long user_id, MultipartFile file, String title, String shortName, Long category_id,
+                          String description, Long[] tag_id, Post post) {
         post.setUser(userService.findUserById(user_id));
         if (!Objects.equals(title, ""))
             post.setTitle(title);
@@ -121,7 +121,7 @@ public class PostController {
         return "redirect:/post/" + user_id;
     }
 
-    @GetMapping("post/preview/{id}")
+    @GetMapping("/post/preview/{id}")
     public String previewPost(@PathVariable(name = "id") Long post_id, Model model) {
         Post post = postService.findPostById(post_id);
         String[] bodies = postService.arrayBody(post.getBody());
@@ -132,7 +132,7 @@ public class PostController {
         return "/post/preview-post";
     }
 
-    @GetMapping("post/delete/{id}")
+    @GetMapping("/post/delete/{id}")
     public String deletePost(@PathVariable(name = "id") Long post_id) {
         postService.deletePost(post_id);
         Long user_id = userService.getCurrentUsername().getId();

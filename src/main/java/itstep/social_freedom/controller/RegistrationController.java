@@ -72,34 +72,16 @@ public class RegistrationController {
         userForm.setUsername(username);
 
         if (userService.checkPassword(id, oldPass)) {
-            if (Objects.equals(password, "") && Objects.equals(passwordConfirm, "")) {
-                redirectAttributes.getFlashAttributes().clear();
-                redirectAttributes.addFlashAttribute("error", "Not all fields are filled!");
+            if (AdminController.addPassword(userForm, redirectAttributes, passwordConfirm, password, userForm))
                 return "redirect:" + (path);
-            } else if (!userForm.getPassword().equals(userForm.getPasswordConfirm())) {
-                redirectAttributes.getFlashAttributes().clear();
-                redirectAttributes.addFlashAttribute("error", "Passwords do not match!");
-                return "redirect:" + (path);
-            } else {
-                userForm.setPassword(password);
-                userForm.setPasswordConfirm(passwordConfirm);
-            }
         } else {
             redirectAttributes.getFlashAttributes().clear();
             redirectAttributes.addFlashAttribute("error", "The old password was entered incorrectly!");
             return "redirect:" + (path);
         }
 
-        if (file != null) {
-            if (!file.isEmpty())
-                userForm.setAvatarUrl(fileService.uploadFile(file, "avatar/"));
-        }
-
-        if (!userService.save(userForm)) {
-            redirectAttributes.getFlashAttributes().clear();
-            redirectAttributes.addFlashAttribute("error", "A user with the same name already exists!");
+        if (AdminController.addFile(redirectAttributes, file, userForm, fileService, userService))
             return "redirect:" + (path);
-        }
 
         return "redirect:/";
     }

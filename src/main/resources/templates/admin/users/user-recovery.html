@@ -53,39 +53,48 @@
                     <div class="container">
                         <div class="signup-content">
                             <div class="signup-form">
-                                <h2>Edit User</h2>
+                                <h2>Recovery User</h2>
                                 <br>
                                 <span style="color: red;" th:if="${error}!=null" th:text="${error}"></span>
                                 <br>
-                                <form method="POST" enctype="multipart/form-data" action="/admin/edit-store"
+                                <form method="POST" enctype="multipart/form-data" action="/admin/recovery"
                                       class="register-form"
                                       id="edit-form">
-                                    <input type="hidden" name="user_id" th:value="${User.getId()}">
+                                    <input type="hidden" name="user_id" th:value="${user.getId()}">
                                     <div class="form-group">
                                         <img style="border-radius: 50%; padding-bottom: 5px" width="40px"
-                                             th:src="@{|../../../${User.getAvatarUrl()}|}" alt="Url">
+                                             th:src="@{|../../../${user.getAvatarUrl()}|}" alt="Url">
                                         <input class="form-control" type="file" name="avatar" id="avatar"/>
                                     </div>
                                     <div class="form-group">
                                         <label for="name"><i
                                                 class="zmdi zmdi-account material-icons-name"></i></label>
-                                        <input type="text" name="username" id="name" th:value="${User.getUsername()}"
+                                        <input type="text" name="username" id="name" th:value="${user.getUsername()}"
                                                placeholder="Your Name"/>
                                     </div>
                                     <div class="form-group">
                                         <label for="email"><i class="zmdi zmdi-email"></i></label>
-                                        <input type="email" name="email" id="email" th:value="${User.getEmail()}"
+                                        <input type="email" name="email" id="email" th:value="${user.getEmail()}"
                                                placeholder="Your Email"/>
                                     </div>
                                     <div class="form-group">
-                                        <input type="checkbox" name="not_removed" id="not_removed"
+                                        <label for="pass"><i class="zmdi zmdi-lock-open"></i></label>
+                                        <input type="password" name="password" id="pass" placeholder="New Password"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="re_pass"><i class="zmdi zmdi-lock-outline"></i></label>
+                                        <input type="password" name="passwordConfirm" id="re_pass"
+                                               placeholder="Repeat your new password"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="checkbox" name="recovery" id="recovery"
                                                class="agree-term"/>
-                                        <label for="not_removed" class="label-agree-term"><span><span></span>
-                                        </span>Not Removed</label>
+                                        <label for="recovery" class="label-agree-term"><span><span></span>
+                                        </span>Recovery</label>
                                     </div>
                                     <div class="form-group form-button">
                                         <input type="submit" name="signup" id="signup" class="form-submit"
-                                               value="Save"/>
+                                               value="Recovery"/>
                                     </div>
                                 </form>
                             </div>

@@ -27,6 +27,10 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
+    public List<Post> posts() {
+        return postRepository.findAll();
+    }
+
     public boolean savePost(Post post) {
         if (post != null) {
             postRepository.save(post);
